@@ -17,8 +17,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+const allowedOrigins = process.env.NODE_ENV === 'production'
+   ? [process.env.FRONTEND_URL]
+   : ['http://localhost:5173', process.env.FRONTEND_URL].filter(Boolean);
+
 app.use(cors({
-   origin:['http://localhost:5173', `${process.env.FRONTEND_URL}`],
+   origin: allowedOrigins,
    credentials: true
 }));
 
@@ -33,12 +38,12 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", userProtection, checkoutRoutes)
 app.use("/api/orders", userProtection, orderRoutes)
-app.use("/api/upload",userProtection, uploadRoutes);
+app.use("/api/upload", userProtection, uploadRoutes);
 app.use("/api/subscribe", subscriberRoutes);
 
 
 // Admin routes
-app.use("/api/admin",userProtection, adminProtection, adminRoutes);
+app.use("/api/admin", userProtection, adminProtection, adminRoutes);
 
 
 
