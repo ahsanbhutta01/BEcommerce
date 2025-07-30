@@ -58,7 +58,7 @@ const CartContent = ({ cart, userId, guestId }) => {
                      </div>
                   </div>
                   <div>
-                     <p>$ {product.price.toLocaleString()}</p>
+                     <p>$ {(product.price * product.quantity).toLocaleString()}</p>
                      <button onClick={()=> handleRemoveFromCart(product.productId, product.size, product.color)} className='text-red-600 hover:text-red-800'>
                      <RiDeleteBin3Line className='size-6 mt-2 text-red-700 cursor-pointer' />
                      </button>
