@@ -13,14 +13,25 @@ async function Registration(req, res) {
       const payload = { user: { id: user._id, role: user.role } }
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "40h" })
 
-      return res.status(201).cookie("token", token, { maxAge: 1000 * 60 * 60 * 40 }).json({
-         user: {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role
-         }
-      })
+      return res.status(201)
+         .cookie(
+            "token", token,
+            {
+               httpOnly: true,
+               secure: process.env.NODE_ENV === 'production',
+               sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+               maxAge: 1000 * 60 * 60 * 40
+            }
+
+         )
+         .json({
+            user: {
+               _id: user._id,
+               name: user.name,
+               email: user.email,
+               role: user.role
+            }
+         })
    } catch (error) {
       // console.error("Error during registration:", error);
       if (error.name === 'ValidationError') {
@@ -61,7 +72,7 @@ async function Login(req, res) {
 
 async function getUserProfile(req, res) {
    try {
-      
+
       res.json(req.user)
    } catch (error) {
       console.log(error)
@@ -70,4 +81,4 @@ async function getUserProfile(req, res) {
 }
 
 
-export { Registration, Login, getUserProfile}
+export { Registration, Login, getUserProfile }

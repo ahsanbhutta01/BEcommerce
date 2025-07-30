@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+dotenv.config();
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.routes.js";
 import productRoutes from './routes/product.routes.js'
@@ -20,7 +21,7 @@ app.use(cors({
    origin:['http://localhost:5173', `${process.env.FRONTEND_URL}`],
    credentials: true
 }));
-dotenv.config();
+
 
 connectDB();
 
